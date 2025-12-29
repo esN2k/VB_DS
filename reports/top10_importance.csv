@@ -1,0 +1,11 @@
+feature,importance
+num__discounted_sales,0.42015888401528867
+num__Sales,0.3799196321202824
+num__profit_margin,0.13877655385714094
+num__sales_per_item,0.018098639601480504
+num__Discount,0.009890862983881582
+num__Postal Code,0.004337113592117707
+num__Quantity,0.0029541221211951303
+cat__Segment_Corporate,0.0028542607233260128
+cat__State_Indiana,0.0027832224228585035
+cat__Region_Central,0.0016501023479802367
