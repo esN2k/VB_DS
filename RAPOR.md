@@ -60,21 +60,34 @@ Yorum:
 - Linear Regression zayif kaldigi icin R2 negatif cikti.
 - Random Forest belirgin sekilde daha iyi; hata dusuyor ve R2 artiyor.
 
-## 6.1) Genelleme (Ablation) Testi - drop_geo
+## 6.1) Ablation Deneyi: Geo Kolonlarini Cikarmanin Etkisi (drop_geo)
 
-City, Postal Code ve State kolonlarini cikartarak modelin genellemesini test ettim.
+Modelin bazi sehir/posta kodu gibi yuksek kardinaliteli alanlari
+"ezberleyip ezberlemedigini" gormek icin kucuk bir ablation testi yaptim.
+Bu amacla Random Forest modelini iki senaryoda karsilastirdim:
 
-| Kosu | Model | MAE | RMSE | R2 |
-| --- | --- | --- | --- | --- |
-| Full | LinearRegression | 94.83 | 232.56 | -0.115 |
-| Full | RandomForestRegressor | 42.15 | 156.90 | 0.492 |
-| No-Geo | LinearRegression | 74.62 | 211.84 | 0.074 |
-| No-Geo | RandomForestRegressor | 25.98 | 116.89 | 0.718 |
+1. **Full**: Tum kolonlar (City/State/Postal Code dahil)
+2. **No-Geo (drop_geo)**: City/State/Postal Code cikarilarak
 
-Yorum:
-- Geo kolonlari cikarildiginda performansin artmasi, bu alanlarin gurultu veya
-  overfit riski tasiyabilecegini gosterir.
-- Bu nedenle raporda "genelleme testi" olarak ayrica raporlandi.
+Asagidaki metrikler test seti uzerinde alinmistir:
+
+| Senaryo           | Model                 |   MAE |   RMSE |    R2 |
+| ----------------- | --------------------- | ----: | -----: | ----: |
+| Full              | RandomForestRegressor | 42.15 | 156.90 | 0.492 |
+| No-Geo (drop_geo) | RandomForestRegressor | 25.98 | 116.89 | 0.718 |
+
+Bu sonuclara gore geo kolonlarini cikardigimda model performansi belirgin
+sekilde artti. Bunu iki sekilde yorumluyorum:
+
+- City/Postal Code gibi alanlar cok fazla benzersiz deger icerdigi icin
+  modeli gereksiz boyutta buyutup gurultu katabiliyor ve genellemeyi
+  zorlastirabiliyor.
+- Geo kirilimi bazen kara dolayli etki etse de, bu veri setinde kari daha cok
+  Sales, Discount, Quantity ve turetilmis ozellikler (sales_per_item,
+  discounted_sales gibi) acikliyor gibi gorunuyor.
+
+Bu nedenle final yorumlarda "geo alanlari cikarildiginda modelin daha
+genellenebilir hale geldigi" not edildi.
 
 ## 7) Feature Importance (Random Forest)
 
@@ -92,6 +105,9 @@ En etkili ozellikler:
 
 Bu liste, karliligin sadece satis miktariyla degil,
 indirim ve urun tipiyle de guclu sekilde iliskili oldugunu gosterir.
+Feature importance listesinde Sales, sales_per_item ve discounted_sales gibi
+degiskenlerin ustte cikmasi; indirim ve adet etkisinin karlilik uzerinde
+dogrudan belirleyici oldugunu destekledi.
 
 ## 8) Sonuc ve Ogrenimler
 
@@ -109,3 +125,4 @@ indirim ve urun tipiyle de guclu sekilde iliskili oldugunu gosterir.
 
 Bu rapor teslim icin hazir formdadir.
 Guncel metrikleri kullanmak istersen `python -m src.run_pipeline` komutunu tekrar calistirabilirsin.
+Ek/Appendix: `reports/metrics_full.csv` ve `reports/metrics_no_geo.csv` dosyalari uretildi.

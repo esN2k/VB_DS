@@ -60,7 +60,9 @@ drop_geo testi (City/Postal Code/State cikartildi):
 
 Konusma notu:
 Lineer model zayif kaldi; R2 negatif. Random Forest ile hata ciddi dustu ve R2 0.49 oldu.
-Genelleme testi icin City/Postal Code/State cikardigimda RF R2 0.718 seviyesine cikti.
+Bir de overfit ihtimalini gormek icin drop_geo ablation deneyi yaptim.
+City/State/Postal Code kolonlarini cikarinca Random Forest performansi daha da yukseltti:
+R2 0.49'dan 0.718'e cikti, RMSE 156'dan 116'ya dustu.
 
 ## Slayt 7: Feature Importance
 
