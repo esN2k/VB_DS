@@ -44,6 +44,18 @@ def _drop_datetime_columns(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
+def _normalize_column_name(name: str) -> str:
+    return "".join(ch.lower() for ch in name if ch.isalnum())
+
+
+def _drop_geo_columns(df: pd.DataFrame, drop_geo: bool) -> pd.DataFrame:
+    if not drop_geo:
+        return df
+    targets = {"city", "postalcode", "state"}
+    drop_cols = [col for col in df.columns if _normalize_column_name(col) in targets]
+    return df.drop(columns=drop_cols, errors="ignore")
+
+
 def build_preprocessor(X: pd.DataFrame) -> ColumnTransformer:
     num_cols = X.select_dtypes(include="number").columns.tolist()
     cat_cols = [col for col in X.columns if col not in num_cols]
@@ -146,7 +158,9 @@ def build_summary(df: pd.DataFrame) -> str:
     return "\n".join(lines)
 
 
-def train_models(df: pd.DataFrame, target: str) -> tuple[pd.DataFrame, pd.DataFrame]:
+def train_models(
+    df: pd.DataFrame, target: str, drop_geo: bool = False
+) -> tuple[pd.DataFrame, pd.DataFrame]:
     if target not in df.columns:
         raise ValueError("Profit column not found")
 
@@ -155,6 +169,7 @@ def train_models(df: pd.DataFrame, target: str) -> tuple[pd.DataFrame, pd.DataFr
         drop_cols = [col for col in X.columns if col.lower() == "profit_margin"]
         if drop_cols:
             X = X.drop(columns=drop_cols)
+    X = _drop_geo_columns(X, drop_geo)
     y = df[target]
     X = _drop_datetime_columns(X)
 
@@ -240,8 +255,12 @@ def main() -> None:
     summary_path = dirs["reports_dir"] / "data_summary.txt"
     summary_path.write_text(summary_text, encoding="utf-8")
 
-    metrics_df, top10_df = train_models(df, target="Profit")
-    metrics_df.to_csv(dirs["reports_dir"] / "metrics.csv", index=False)
+    metrics_full, top10_df = train_models(df, target="Profit", drop_geo=False)
+    metrics_no_geo, _ = train_models(df, target="Profit", drop_geo=True)
+
+    metrics_full.to_csv(dirs["reports_dir"] / "metrics.csv", index=False)
+    metrics_full.to_csv(dirs["reports_dir"] / "metrics_full.csv", index=False)
+    metrics_no_geo.to_csv(dirs["reports_dir"] / "metrics_no_geo.csv", index=False)
     top10_df.to_csv(dirs["reports_dir"] / "top10_importance.csv", index=False)
 
     print("OK: outputs generated")

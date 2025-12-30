@@ -32,7 +32,19 @@ def _drop_datetime_columns(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
-def prepare_features(df: pd.DataFrame, target: str):
+def _normalize_column_name(name: str) -> str:
+    return "".join(ch.lower() for ch in name if ch.isalnum())
+
+
+def _drop_geo_columns(df: pd.DataFrame, drop_geo: bool) -> pd.DataFrame:
+    if not drop_geo:
+        return df
+    targets = {"city", "postalcode", "state"}
+    drop_cols = [col for col in df.columns if _normalize_column_name(col) in targets]
+    return df.drop(columns=drop_cols, errors="ignore")
+
+
+def prepare_features(df: pd.DataFrame, target: str, drop_geo: bool = False):
     if target not in df.columns:
         raise ValueError(f"Target column not found: {target}")
 
@@ -42,6 +54,7 @@ def prepare_features(df: pd.DataFrame, target: str):
         drop_cols = [col for col in X.columns if col.lower() == "profit_margin"]
         if drop_cols:
             X = X.drop(columns=drop_cols)
+    X = _drop_geo_columns(X, drop_geo)
     X = _drop_datetime_columns(X)
     return X, y
 
@@ -181,10 +194,15 @@ def main() -> None:
     parser.add_argument("--input", required=True, help="Path to processed CSV")
     parser.add_argument("--target", default="Profit", help="Target column name")
     parser.add_argument("--test-size", type=float, default=0.2, help="Test split ratio")
+    parser.add_argument(
+        "--drop-geo",
+        action="store_true",
+        help="Drop City/Postal Code/State for generalization test",
+    )
     args = parser.parse_args()
 
     df = load_processed(args.input)
-    X, y = prepare_features(df, args.target)
+    X, y = prepare_features(df, args.target, drop_geo=args.drop_geo)
 
     X_train, X_test, y_train, y_test = train_test_split(
         X, y, test_size=args.test_size, random_state=42

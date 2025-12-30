@@ -60,6 +60,22 @@ Yorum:
 - Linear Regression zayif kaldigi icin R2 negatif cikti.
 - Random Forest belirgin sekilde daha iyi; hata dusuyor ve R2 artiyor.
 
+## 6.1) Genelleme (Ablation) Testi - drop_geo
+
+City, Postal Code ve State kolonlarini cikartarak modelin genellemesini test ettim.
+
+| Kosu | Model | MAE | RMSE | R2 |
+| --- | --- | --- | --- | --- |
+| Full | LinearRegression | 94.83 | 232.56 | -0.115 |
+| Full | RandomForestRegressor | 42.15 | 156.90 | 0.492 |
+| No-Geo | LinearRegression | 74.62 | 211.84 | 0.074 |
+| No-Geo | RandomForestRegressor | 25.98 | 116.89 | 0.718 |
+
+Yorum:
+- Geo kolonlari cikarildiginda performansin artmasi, bu alanlarin gurultu veya
+  overfit riski tasiyabilecegini gosterir.
+- Bu nedenle raporda "genelleme testi" olarak ayrica raporlandi.
+
 ## 7) Feature Importance (Random Forest)
 
 En etkili ozellikler:

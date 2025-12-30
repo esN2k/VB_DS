@@ -27,6 +27,8 @@ python -m src.run_pipeline
 - `data/processed/clean.csv`
 - `reports/data_summary.txt`
 - `reports/metrics.csv`
+- `reports/metrics_full.csv`
+- `reports/metrics_no_geo.csv`
 - `reports/top10_importance.csv`
 - `reports/figures/` (sadece notebook calisirsa)
 
@@ -58,6 +60,7 @@ Not: Aykiri degerler IQR ile **sadece raporlanir**, silinmez.
 - Modeller: `LinearRegression` ve `RandomForestRegressor`
 - Profit negatif olabildigi icin hedefe `log1p` donusumu uygulanir (gerekirse shift).
 - RandomForest icin top-10 feature importance raporlanir.
+- Genelleme testi icin drop_geo opsiyonu (City/Postal Code/State disarida).
 
 ## Proje Yapisi
 

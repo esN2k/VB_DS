@@ -54,8 +54,13 @@ Baslangic icin lineer model kurdum, sonra agac tabanli RF ile guclendirdim.
 | LinearRegression | 94.83 | 232.56 | -0.115 |
 | RandomForestRegressor | 42.15 | 156.90 | 0.492 |
 
+drop_geo testi (City/Postal Code/State cikartildi):
+- LinearRegression: MAE 74.62, RMSE 211.84, R2 0.074
+- RandomForestRegressor: MAE 25.98, RMSE 116.89, R2 0.718
+
 Konusma notu:
 Lineer model zayif kaldi; R2 negatif. Random Forest ile hata ciddi dustu ve R2 0.49 oldu.
+Genelleme testi icin City/Postal Code/State cikardigimda RF R2 0.718 seviyesine cikti.
 
 ## Slayt 7: Feature Importance
 
@@ -85,6 +90,7 @@ Bu veri tipi icin agac tabanli model daha uygun. Sonucu bu netlikte gordum.
 
 Konusma notu:
 Modeli daha guclu yapmak icin bu iyilestirmeler planlanabilir.
+drop_geo testi bu kolonlarin bazen gurultu yaratabilecegini gosterdi.
 
 ## Slayt 10: Soru - Cevap
 
