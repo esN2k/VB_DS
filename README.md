@@ -81,6 +81,21 @@ Sira ile calistir:
 2) `notebooks/02_eda.ipynb`
 3) `notebooks/03_model.ipynb`
 
+## Proje Durum Raporu (YENİ!)
+
+Projenin güncel durumunu görmek için:
+```powershell
+python -m src.audit_repo
+```
+
+Bu komut `DURUM_RAPORU.md` dosyası oluşturur ve şunları gösterir:
+- Tüm dosyaların durumu (✓/✗)
+- Modellerin gerçek metrikleri
+- Eksikler ve riskler
+- Hoca sorularına hazır cevaplar
+
+Detaylı kullanım: `AUDIT_NASIL_KULLANILIR.md`
+
 ## Dokumantasyon Dosyalari
 
 - `INSTRUCTIONS.md` -> Basit talimatlar (ilk bakan icin)
@@ -90,6 +105,7 @@ Sira ile calistir:
 - `SUNUM.md` -> Sunum akisi + konusma notlari
 - `SUNUM_SLIDES.pptx` -> Hazir slayt dosyasi
 - `SUNUM_SLIDES.pdf` -> Hazir sunum PDF
+- `AUDIT_NASIL_KULLANILIR.md` -> Audit scripti kullanim kilavuzu
 
 ## Sik Karsilasilan Hatalar
 
