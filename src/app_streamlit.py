@@ -105,7 +105,7 @@ def main():
             "Benzersiz": [df[col].nunique() for col in df.columns]
         })
         
-        st.dataframe(col_info, use_container_width=True)
+        st.dataframe(col_info, width='stretch')
         
         # Filtreler
         st.subheader("Veri Filtreleme")
@@ -138,11 +138,11 @@ def main():
             
             # İlk 10 satırı göster
             st.subheader("Örnek Veri (İlk 10 Satır)")
-            st.dataframe(filtered_df.head(10), use_container_width=True)
+            st.dataframe(filtered_df.head(10), width='stretch')
         else:
             # İlk 10 satırı göster
             st.subheader("Örnek Veri (İlk 10 Satır)")
-            st.dataframe(df.head(10), use_container_width=True)
+            st.dataframe(df.head(10), width='stretch')
     
     # TAB 2: EDA Grafikleri
     with tab2:
@@ -171,7 +171,7 @@ def main():
                 # İstatistikler
                 st.subheader(f"{selected_col} İstatistikleri")
                 stats = df[selected_col].describe()
-                st.dataframe(stats.to_frame().T, use_container_width=True)
+                st.dataframe(stats.to_frame().T, width='stretch')
         
         # Scatter plot
         if len(num_cols) >= 2:
@@ -236,7 +236,7 @@ def main():
         # Full Model Metrikleri
         if "full" in metrics:
             st.subheader("📊 Full Model Metrikleri (Tüm Kolonlar)")
-            st.dataframe(metrics["full"], use_container_width=True)
+            st.dataframe(metrics["full"], width='stretch')
             
             # En iyi modeli vurgula
             best_model_full = metrics["full"].loc[metrics["full"]["r2"].idxmax()]
@@ -247,7 +247,7 @@ def main():
         # No-Geo Model Metrikleri
         if "no_geo" in metrics:
             st.subheader("📊 No-Geo Model Metrikleri (City/State/Postal Code Hariç)")
-            st.dataframe(metrics["no_geo"], use_container_width=True)
+            st.dataframe(metrics["no_geo"], width='stretch')
             
             # En iyi modeli vurgula
             best_model_no_geo = metrics["no_geo"].loc[metrics["no_geo"]["r2"].idxmax()]
@@ -315,7 +315,7 @@ def main():
             st.pyplot(fig)
             
             # Tablo olarak da göster
-            st.dataframe(top10, use_container_width=True)
+            st.dataframe(top10, width='stretch')
     
     # Footer
     st.markdown("---")
