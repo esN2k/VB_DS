@@ -12,7 +12,7 @@ Güncel Durum Raporu
 
 ### Kullanılan Veri Set(ler)i
 - ✓ Ham veri: /home/runner/work/VB_DS/VB_DS/data/raw/SampleSuperstore.csv (1077.2 KB)
-- ✓ Temizlenmiş veri: /home/runner/work/VB_DS/VB_DS/data/processed/clean.csv (1392.2 KB)
+- ✗ Temizlenmiş veri: /home/runner/work/VB_DS/VB_DS/data/processed/clean.csv (BULUNAMADI)
 
 ### En Son Üretilen Çıktılar
 - ✓ Veri özet raporu: /home/runner/work/VB_DS/VB_DS/reports/data_summary.txt (0.3 KB)
@@ -86,13 +86,11 @@ notebooks/
   03_model.ipynb (4.2 KB)
 reports/
   data_summary.txt (0.3 KB)
-  figures/
   metrics.csv (0.2 KB)
   metrics_full.csv (0.2 KB)
   metrics_no_geo.csv (0.2 KB)
   top10_importance.csv (0.4 KB)
 data/
-  processed/
   raw/
 deliverables/
   teslim_paketi/
