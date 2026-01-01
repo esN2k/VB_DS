@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import argparse
+import logging
 from pathlib import Path
 
 import numpy as np
@@ -15,6 +17,13 @@ from sklearn.preprocessing import OneHotEncoder, StandardScaler
 
 from .evaluate import evaluate_regression
 from .preprocess import clean_data, feature_engineering, load_raw, save_processed
+
+# Logging yapılandırması
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s',
+    datefmt='%Y-%m-%d %H:%M:%S'
+)
 
 
 def ensure_dirs(project_root: Path) -> dict[str, Path]:
@@ -235,34 +244,81 @@ def train_models(
 
 
 def main() -> None:
+    """Ana pipeline fonksiyonu - CLI ile çalıştırılabilir."""
+    parser = argparse.ArgumentParser(
+        description="VB_DS Profit Tahmini Pipeline - Veri temizleme, feature engineering ve model eğitimi"
+    )
+    parser.add_argument(
+        "--drop-geo",
+        action="store_true",
+        help="City/State/Postal Code kolonlarını çıkar (No-Geo ablation testi)"
+    )
+    parser.add_argument(
+        "--seed",
+        type=int,
+        default=42,
+        help="Random seed (reproducibility için, default: 42)"
+    )
+    parser.add_argument(
+        "--output-dir",
+        type=str,
+        default="reports",
+        help="Çıktı dizini (default: reports/)"
+    )
+    
+    args = parser.parse_args()
+    
     project_root = Path(__file__).resolve().parents[1]
+    
+    # Output dizini oluştur
+    output_dir = project_root / args.output_dir
     dirs = ensure_dirs(project_root)
+    
+    logging.info(f"Pipeline başlatıldı - Seed: {args.seed}, Drop Geo: {args.drop_geo}")
+    logging.info(f"Proje kök dizini: {project_root}")
+    logging.info(f"Çıktı dizini: {output_dir}")
 
     raw_path = project_root / "data" / "raw" / "SampleSuperstore.csv"
     if not raw_path.exists():
+        logging.error(f"Ham veri bulunamadı: {raw_path}")
+        logging.error("Lütfen SampleSuperstore.csv dosyasını data/raw/ klasörüne koyun.")
         raise FileNotFoundError(
-            "SampleSuperstore.csv not found. Expected at data/raw/SampleSuperstore.csv"
+            f"SampleSuperstore.csv not found. Expected at {raw_path}"
         )
-
+    
+    logging.info(f"Ham veri yükleniyor: {raw_path}")
     df = load_raw(raw_path)
+    logging.info(f"Ham veri yüklendi: {len(df)} satır, {len(df.columns)} kolon")
+    
+    logging.info("Veri temizleniyor...")
     df = clean_data(df)
+    
+    logging.info("Feature engineering yapılıyor...")
     df = feature_engineering(df)
 
     processed_path = dirs["processed_dir"] / "clean.csv"
+    logging.info(f"Temizlenmiş veri kaydediliyor: {processed_path}")
     save_processed(df, processed_path)
 
     summary_text = build_summary(df)
     summary_path = dirs["reports_dir"] / "data_summary.txt"
     summary_path.write_text(summary_text, encoding="utf-8")
+    logging.info(f"Veri özeti kaydedildi: {summary_path}")
 
+    logging.info("Model eğitimi başlıyor (Full - tüm kolonlarla)...")
     metrics_full, top10_df = train_models(df, target="Profit", drop_geo=False)
+    
+    logging.info("Model eğitimi başlıyor (No-Geo - City/State/Postal Code hariç)...")
     metrics_no_geo, _ = train_models(df, target="Profit", drop_geo=True)
 
+    logging.info("Metrikler kaydediliyor...")
     metrics_full.to_csv(dirs["reports_dir"] / "metrics.csv", index=False)
     metrics_full.to_csv(dirs["reports_dir"] / "metrics_full.csv", index=False)
     metrics_no_geo.to_csv(dirs["reports_dir"] / "metrics_no_geo.csv", index=False)
     top10_df.to_csv(dirs["reports_dir"] / "top10_importance.csv", index=False)
 
+    logging.info("✓ Pipeline tamamlandı!")
+    logging.info(f"Çıktılar: {dirs['reports_dir']}/")
     print("OK: outputs generated")
 
 

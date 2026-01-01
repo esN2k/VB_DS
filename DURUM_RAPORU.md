@@ -3,6 +3,12 @@ REPO AUDITOR + DATA SCIENCE PROJE KOÇU
 Güncel Durum Raporu
 ================================================================================
 
+### Ortam Bilgisi
+- **Tarih/Saat:** 2026-01-01 14:45:32
+- **Python Versiyonu:** 3.12.3
+- **Çalışma Dizini:** /home/runner/work/VB_DS/VB_DS
+- **Proje Kök Dizini:** /home/runner/work/VB_DS/VB_DS
+
 ## 1) ŞU AN PROJE NE DURUMDA?
 
 ### Problem Tanımı ve Hedef Değişken
@@ -12,7 +18,7 @@ Güncel Durum Raporu
 
 ### Kullanılan Veri Set(ler)i
 - ✓ Ham veri: /home/runner/work/VB_DS/VB_DS/data/raw/SampleSuperstore.csv (1077.2 KB)
-- ✗ Temizlenmiş veri: /home/runner/work/VB_DS/VB_DS/data/processed/clean.csv (BULUNAMADI)
+- ✓ Temizlenmiş veri: /home/runner/work/VB_DS/VB_DS/data/processed/clean.csv (1392.2 KB)
 
 ### En Son Üretilen Çıktılar
 - ✓ Veri özet raporu: /home/runner/work/VB_DS/VB_DS/reports/data_summary.txt (0.3 KB)
@@ -60,7 +66,7 @@ RandomForestRegressor 25.979721 116.891142 0.718191
 - ✓ Sunum akışı + konuşma notları: /home/runner/work/VB_DS/VB_DS/SUNUM.md (3.6 KB)
 - ✓ PowerPoint sunumu: /home/runner/work/VB_DS/VB_DS/SUNUM_SLIDES.pptx (40.0 KB)
 - ✓ PDF sunumu: /home/runner/work/VB_DS/VB_DS/SUNUM_SLIDES.pdf (114.2 KB)
-- ✓ Proje README: /home/runner/work/VB_DS/VB_DS/README.md (3.1 KB)
+- ✓ Proje README: /home/runner/work/VB_DS/VB_DS/README.md (5.2 KB)
 - ✓ Basit talimatlar: /home/runner/work/VB_DS/VB_DS/INSTRUCTIONS.md (1.5 KB)
 - ✓ Adım adım anlatım: /home/runner/work/VB_DS/VB_DS/ADIM_ADIM.md (1.7 KB)
 
@@ -75,10 +81,12 @@ RandomForestRegressor 25.979721 116.891142 0.718191
 src/
   __init__.py (0.0 KB)
   __pycache__/
-  audit_repo.py (17.6 KB)
+  app_streamlit.py (11.2 KB)
+  audit_repo.py (18.1 KB)
   evaluate.py (0.6 KB)
+  make_figures.py (5.4 KB)
   preprocess.py (4.9 KB)
-  run_pipeline.py (9.1 KB)
+  run_pipeline.py (11.1 KB)
   train.py (7.3 KB)
 notebooks/
   01_load_clean.ipynb (5.6 KB)
@@ -86,11 +94,13 @@ notebooks/
   03_model.ipynb (4.2 KB)
 reports/
   data_summary.txt (0.3 KB)
+  figures/
   metrics.csv (0.2 KB)
   metrics_full.csv (0.2 KB)
   metrics_no_geo.csv (0.2 KB)
   top10_importance.csv (0.4 KB)
 data/
+  processed/
   raw/
 deliverables/
   teslim_paketi/

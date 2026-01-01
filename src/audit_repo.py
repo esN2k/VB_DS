@@ -5,7 +5,9 @@ Projeyi SON HALİYLE inceler ve güncel durum raporu çıkarır.
 """
 from __future__ import annotations
 
+import os
 import sys
+from datetime import datetime
 from pathlib import Path
 from typing import Optional
 
@@ -71,6 +73,14 @@ def audit_project(project_root: Path) -> str:
     report_lines.append("REPO AUDITOR + DATA SCIENCE PROJE KOÇU")
     report_lines.append("Güncel Durum Raporu")
     report_lines.append("=" * 80)
+    report_lines.append("")
+    
+    # Ortam bilgisi ve timestamp
+    report_lines.append("### Ortam Bilgisi")
+    report_lines.append(f"- **Tarih/Saat:** {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    report_lines.append(f"- **Python Versiyonu:** {sys.version.split()[0]}")
+    report_lines.append(f"- **Çalışma Dizini:** {os.getcwd()}")
+    report_lines.append(f"- **Proje Kök Dizini:** {project_root}")
     report_lines.append("")
     
     # ========================================================================
