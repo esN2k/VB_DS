@@ -49,6 +49,69 @@ streamlit run src/app_streamlit.py
 - 🎯 Model Sonuçları: Metrikler, karşılaştırma, feature importance
 - 🔍 Filtreler: Region/Category/Segment bazlı filtreleme
 
+## 📊 CANVA SUNUMU HAZIRLAMA
+
+**🎓 JÜRİ SUNUMU İÇİN KAPSAMLI REHBERLERİ BİRLEŞTİRİLMİŞTİR!**
+
+Sunuş hazırlaması için **5 temel dokümanda** tüm ihtiyacın var:
+
+### 🔴 **BAŞLA BURADAN** (Hemen oku - 10 dakika)
+📍 **[SUNUM_QUICK_REFERENCE.md](SUNUM_QUICK_REFERENCE.md)**
+- Her slaytın 1 cümlelik özeti
+- Konuşacağın şablonlu metin
+- 7 olası soru + hazır cevaplar
+- Son dakika panik protokolü
+
+### 🟡 **Detaylı Hazırlık** (1-2 gün öncesi, 1.5 saat)
+
+**1. Slayt İçeriği:** [CANVA_SUNUM_REHBERI.md](CANVA_SUNUM_REHBERI.md)
+- 10 slaytın tam detayı (metni, görselleri, tasarımı)
+- Canva'da nasıl oluşturacağın adım adım
+- Renk, font, layout best practices
+
+**2. Konuşma Metni:** [JURI_SUNUM_AKISI.md](JURI_SUNUM_AKISI.md)
+- 7-9 dakikalık tam konuşma (doğal, samimi dille)
+- Her slayt için detaylı metin
+- Psikolojik hazırlık notları
+
+**3. Yapılacaklar Listesi:** [CANVA_TODO_LIST.md](CANVA_TODO_LIST.md)
+- 7 ana görev adım adım (içerik → görseller → slaytlar → tasarım → export → prova → kontroller)
+- Takvim (T-2 gün → Sabah)
+- Tahmini çalışma saatleri (~7.5 saat)
+
+### 🟢 **Kontroller & Acil Durum** (Jüri günü)
+
+**4. Jüri Günü Kontrol Listesi:** [SUNUM_KONTROL_LISTESI.md](SUNUM_KONTROL_LISTESI.md)
+- 5 phase (24 saat öncesi → sunuş sonrası)
+- Teknik kontroller
+- Acil durum planları
+- Sunum esnasında dinamik rehber
+
+**5. Canlı Demo (İsteğe bağlı):** [DEMO_SCRIPT.md](DEMO_SCRIPT.md)
+- Streamlit uygulamasını jüri önünde nasıl açacağın
+- 5-7 dakikalık demo senaryo
+- Olası sorunlar ve çözümler
+
+### 📑 **TÜMSÜRÜ KAPSAYANİNDEKS** 
+📍 **[SUNUM_DOKUMANTASYON_INDEKSI.md](SUNUM_DOKUMANTASYON_INDEKSI.md)**
+- Hangi dosyayı ne zaman okuyacağını söyler
+- Hızlı referans tablosu
+- Acil durum planları
+
+---
+
+**⏱️ Hızlı Planlama:**
+- **Bugün (T-2):** SUNUM_QUICK_REFERENCE.md oku (10 min) + CANVA_SUNUM_REHBERI.md başlangıç (15 min)
+- **Yarın (T-1):** CANVA_TODO_LIST.md takip edip slaytları oluştur (3 saat)
+- **Sunum Günü Sabahı:** SUNUM_KONTROL_LISTESI.md + SUNUM_QUICK_REFERENCE.md (30 min)
+- **Salonun Kapısında:** SUNUM_QUICK_REFERENCE.md son bakış (5 min)
+
+---
+
+## 📖 EK DOKÜMANTASYON
+
+İhtiyaca göre okuyabileceğin diğer rehberler:
+
 **Not:** Uygulama için önce pipeline çalıştırılmalıdır.
 
 ## Ne Uretir?
