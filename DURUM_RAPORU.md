@@ -18,7 +18,7 @@ Güncel Durum Raporu
 - ✓ Veri özet raporu: /home/runner/work/VB_DS/VB_DS/reports/data_summary.txt (0.3 KB)
 - ✓ Model metrikleri (ana): /home/runner/work/VB_DS/VB_DS/reports/metrics.csv (0.2 KB)
 - ✓ Full model metrikleri: /home/runner/work/VB_DS/VB_DS/reports/metrics_full.csv (0.2 KB)
-- ✗ No-Geo model metrikleri: /home/runner/work/VB_DS/VB_DS/reports/metrics_no_geo (BULUNAMADI)
+- ✓ No-Geo model metrikleri: /home/runner/work/VB_DS/VB_DS/reports/metrics_no_geo.csv (0.2 KB)
 - ✓ Top-10 feature importance: /home/runner/work/VB_DS/VB_DS/reports/top10_importance.csv (0.4 KB)
 
 ### Modeller ve Metrikler (Dosyadan Okunan)
@@ -60,7 +60,7 @@ RandomForestRegressor 25.979721 116.891142 0.718191
 - ✓ Sunum akışı + konuşma notları: /home/runner/work/VB_DS/VB_DS/SUNUM.md (3.6 KB)
 - ✓ PowerPoint sunumu: /home/runner/work/VB_DS/VB_DS/SUNUM_SLIDES.pptx (40.0 KB)
 - ✓ PDF sunumu: /home/runner/work/VB_DS/VB_DS/SUNUM_SLIDES.pdf (114.2 KB)
-- ✓ Proje README: /home/runner/work/VB_DS/VB_DS/README.md (2.7 KB)
+- ✓ Proje README: /home/runner/work/VB_DS/VB_DS/README.md (3.1 KB)
 - ✓ Basit talimatlar: /home/runner/work/VB_DS/VB_DS/INSTRUCTIONS.md (1.5 KB)
 - ✓ Adım adım anlatım: /home/runner/work/VB_DS/VB_DS/ADIM_ADIM.md (1.7 KB)
 

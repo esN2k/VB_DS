@@ -105,7 +105,7 @@ def audit_project(project_root: Path) -> str:
         ("data_summary.txt", "Veri özet raporu"),
         ("metrics.csv", "Model metrikleri (ana)"),
         ("metrics_full.csv", "Full model metrikleri"),
-        ("metrics_no_geo", "No-Geo model metrikleri"),
+        ("metrics_no_geo.csv", "No-Geo model metrikleri"),
         ("top10_importance.csv", "Top-10 feature importance"),
     ]
     
