@@ -45,7 +45,7 @@ def clean_data(df: pd.DataFrame) -> pd.DataFrame:
 
     for col in cat_cols:
         mode = df[col].mode(dropna=True)
-        fill_value = mode.iloc[0] if not mode.empty else "Unknown"
+        fill_value = mode.iloc[0] if not mode.empty else "Bilinmiyor"
         df[col] = df[col].fillna(fill_value)
 
     for col in date_cols:
@@ -109,10 +109,10 @@ def save_processed(df: pd.DataFrame, path: str | Path) -> None:
 def report_outliers(df: pd.DataFrame) -> None:
     num_cols = df.select_dtypes(include="number").columns.tolist()
     if not num_cols:
-        print("Outlier report (IQR): no numeric columns found")
+        print("Aykiri deger raporu (IQR): sayisal kolon bulunamadi")
         return
 
-    print("Outlier report (IQR):")
+    print("Aykiri deger raporu (IQR):")
     for col in num_cols:
         series = pd.to_numeric(df[col], errors="coerce").dropna()
         if series.empty:
@@ -132,12 +132,12 @@ def report_outliers(df: pd.DataFrame) -> None:
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Clean and featurize raw data")
-    parser.add_argument("--input", required=True, help="Path to raw CSV")
+    parser = argparse.ArgumentParser(description="Ham veriyi temizle ve ozellik uret")
+    parser.add_argument("--input", required=True, help="Ham CSV dosya yolu")
     parser.add_argument(
         "--output",
         default=str(Path("data") / "processed" / "clean.csv"),
-        help="Path to save processed CSV",
+        help="Islenmis CSV cikti yolu",
     )
     args = parser.parse_args()
 
@@ -147,7 +147,7 @@ def main() -> None:
     report_outliers(df)
     save_processed(df, args.output)
 
-    print(f"Saved processed data to {args.output}")
+    print(f"Islenmis veri kaydedildi: {args.output}")
 
 
 if __name__ == "__main__":

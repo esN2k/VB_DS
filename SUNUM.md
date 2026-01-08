@@ -1,11 +1,11 @@
-# SUNUM - Juriye Sunum Metni ve Akis
+# SUNUM - Juri Sunum Metni ve Akis
 
 Bu dosya sunumda kullanman icin hazir bir akistir.
 Her slayt icin kisa baslik, madde ve konusma notu var.
 
 ## Slayt 1: Baslik
 
-**Baslik:** Profit Tahmini - SampleSuperstore
+**Baslik:** Kar (Profit) Tahmini - SampleSuperstore
 
 Konusma notu:
 Benim projem, SampleSuperstore verisiyle karlilik tahmini yapmak.
@@ -30,7 +30,7 @@ Veri temel satis ve kategori bilgilerini iceriyor. Tarih varsa ek ozellikler ure
 
 ## Slayt 4: Temizleme ve Ozellik Muhendisligi
 
-- Bos degerler: sayisal median, kategorik mod
+- Bos degerler: sayisal medyan, kategorik mod
 - Kategorikler: stringe cevir + trim
 - Tarih varsa: order_month, order_dayofweek, shipping_delay
 - Tarih yoksa: sales_per_item, discounted_sales, is_high_discount
@@ -40,8 +40,8 @@ Sade ama saglam bir temizlik yaptim. Tarih yoksa bile islevsel ozellikler uretiy
 
 ## Slayt 5: Modelleme Akisi
 
-- Pipeline: OneHotEncoder + StandardScaler
-- Modeller: LinearRegression (baseline), RandomForestRegressor
+- Is akisi: OneHotEncoder + StandardScaler
+- Modeller: LinearRegression (temel), RandomForestRegressor
 - Profit hedefinde log1p donusumu (negatif varsa shift)
 
 Konusma notu:
@@ -54,17 +54,17 @@ Baslangic icin lineer model kurdum, sonra agac tabanli RF ile guclendirdim.
 | LinearRegression | 94.83 | 232.56 | -0.115 |
 | RandomForestRegressor | 42.15 | 156.90 | 0.492 |
 
-drop_geo testi (City/Postal Code/State cikartildi):
+drop_geo deneyi (City/Postal Code/State cikarildi):
 - LinearRegression: MAE 74.62, RMSE 211.84, R2 0.074
 - RandomForestRegressor: MAE 25.98, RMSE 116.89, R2 0.718
 
 Konusma notu:
 Lineer model zayif kaldi; R2 negatif. Random Forest ile hata ciddi dustu ve R2 0.49 oldu.
-Bir de overfit ihtimalini gormek icin drop_geo ablation deneyi yaptim.
+Bir de asiri uyum ihtimalini gormek icin drop_geo deneyi yaptim.
 City/State/Postal Code kolonlarini cikarinca Random Forest performansi daha da yukseltti:
 R2 0.49'dan 0.718'e cikti, RMSE 156'dan 116'ya dustu.
 
-## Slayt 7: Feature Importance
+## Slayt 7: Ozellik Onemi
 
 - Sales (0.212), sales_per_item (0.178), discounted_sales (0.172)
 - Discount (0.045) ve is_high_discount (0.036)
@@ -78,29 +78,26 @@ Bolgesel ve kategori kirilimlari da belirgin etki gosteriyor.
 ## Slayt 8: Sonuc
 
 - Dogrusal model yeterli degil
-- Random Forest daha basarili
-- Indirim ve kategori bilgisi kritik
+- Agac tabanli model daha basarili
+- Geo kolonlari gerektiginde cikarilabilir
 
 Konusma notu:
-Bu veri tipi icin agac tabanli model daha uygun. Sonucu bu netlikte gordum.
+Genel sonuc: veri dogrusal degil, agac tabanli model daha uygun. Geo kolonlari ise
+asiri uyum yaratabildigi icin kontrollu kullanilmali.
 
-## Slayt 9: Sinirlamalar ve Ileri Adimlar
+## Slayt 9: Sinirlamalar ve Gelecek Calismalar
 
-- City/Postal Code gibi kolonlar overfit olabilir
-- Hiperparametre aramasi ile iyilestirilebilir
-- Daha iyi genelleme icin kategorik sadelestirme denenebilir
+- Geo kolonlari asiri uyum riski tasir
+- Hiperparametre aramasi performansi artirabilir
+- Kategori sadelestirme denenebilir
 
 Konusma notu:
-Modeli daha guclu yapmak icin bu iyilestirmeler planlanabilir.
-drop_geo testi bu kolonlarin bazen gurultu yaratabilecegini gosterdi.
+Bu calisma temel bir modelleme. Daha iyi genelleme icin ileri adimlar var.
 
-## Slayt 10: Soru - Cevap
+## Slayt 10: Kapanis
 
-Kisa cevap hazirliklari:
-- "R2 neden negatif?" -> Linear model ortalamadan kotu kaldi.
-- "Neden RF?" -> Dogrusal olmayan iliskileri yakaliyor.
-- "profit_margin neden yok?" -> Leakage onlemek icin cikardim.
+- Sorular?
+- Tesekkurler
 
-## 15 Saniyelik Ozet Cumlesi
-
-"Linear Regression baseline olarak zayif kaldi; R2 negatif cikti. Random Forest ile MAE 94'ten 42'ye dustu ve R2 yaklasik 0.49 oldu. Yani karlilik iliskileri dogrusal degil; indirim ve kategori etkilerini RF daha iyi yakaladi."
+Konusma notu:
+Kisaca ozetledim, sorulari memnuniyetle yanitlarim.

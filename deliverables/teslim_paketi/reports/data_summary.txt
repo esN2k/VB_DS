@@ -1,6 +1,0 @@
-Rows: 9994
-Columns: 17
-Numeric columns (9): Postal Code, Sales, Quantity, Discount, Profit, sales_per_item, discounted_sales, profit_margin, is_high_discount
-Categorical columns (8): Ship Mode, Segment, Country, City, State, Region, Category, Sub-Category
-Total missing values: 0
-Missing by column: None

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Repo Auditor + Data Science Proje Koçu
-Projeyi SON HALİYLE inceler ve güncel durum raporu çıkarır.
+Proje Denetleyici + Veri Bilimi Proje Kocu
+Projeyi mevcut haliyle inceler ve guncel durum raporu cikarir.
 """
 from __future__ import annotations
 
@@ -43,7 +43,7 @@ def build_tree_view(project_root: Path) -> str:
     lines = []
     
     # Ana dizinler
-    important_dirs = ["src", "notebooks", "reports", "data", "deliverables"]
+    important_dirs = ["src", "notebooks", "reports", "data"]
     
     for dir_name in important_dirs:
         dir_path = project_root / dir_name
@@ -70,7 +70,7 @@ def audit_project(project_root: Path) -> str:
     
     report_lines = []
     report_lines.append("=" * 80)
-    report_lines.append("REPO AUDITOR + DATA SCIENCE PROJE KOÇU")
+    report_lines.append("PROJE DENETLEYICI + VERI BILIMI PROJE KOCU")
     report_lines.append("Güncel Durum Raporu")
     report_lines.append("=" * 80)
     report_lines.append("")
@@ -112,11 +112,11 @@ def audit_project(project_root: Path) -> str:
     
     reports_dir = project_root / "reports"
     output_files = [
-        ("data_summary.txt", "Veri özet raporu"),
+        ("data_summary.txt", "Veri ozet raporu"),
         ("metrics.csv", "Model metrikleri (ana)"),
-        ("metrics_full.csv", "Full model metrikleri"),
-        ("metrics_no_geo.csv", "No-Geo model metrikleri"),
-        ("top10_importance.csv", "Top-10 feature importance"),
+        ("metrics_full.csv", "Tam model metrikleri"),
+        ("metrics_no_geo.csv", "Geo Yok model metrikleri"),
+        ("top10_importance.csv", "Ilk 10 ozellik onemi"),
     ]
     
     for filename, desc in output_files:
@@ -130,8 +130,8 @@ def audit_project(project_root: Path) -> str:
     report_lines.append("### Modeller ve Metrikler (Dosyadan Okunan)")
     
     metrics_files = {
-        "Full (metrics.csv / metrics_full.csv)": reports_dir / "metrics_full.csv",
-        "No-Geo (metrics_no_geo.csv)": reports_dir / "metrics_no_geo.csv",
+        "Tam (metrics.csv / metrics_full.csv)": reports_dir / "metrics_full.csv",
+        "Geo Yok (metrics_no_geo.csv)": reports_dir / "metrics_no_geo.csv",
     }
     
     for label, path in metrics_files.items():
@@ -147,24 +147,24 @@ def audit_project(project_root: Path) -> str:
     report_lines.append("")
     
     # Ablation / ek deneyler
-    report_lines.append("### Ablation / Ek Deneyler")
-    report_lines.append("- drop_geo: ✓ City/State/Postal Code çıkarılarak test edildi")
-    report_lines.append("- Sonuç: No-Geo modelde RandomForest R² artışı gözlemlendi")
-    report_lines.append("  (Full: R²=0.492 → No-Geo: R²=0.718)")
-    report_lines.append("- Grid search / hiperparametre optimizasyonu: Yok (manuel ayar var)")
+    report_lines.append("### Ablasyon / Ek Deneyler")
+    report_lines.append("- drop_geo: ✓ City/State/Postal Code cikarilarak test edildi")
+    report_lines.append("- Sonuc: Geo Yok modelde RandomForest R2 artisi gozlemlendi")
+    report_lines.append("  (Tam: R2=0.492 -> Geo Yok: R2=0.718)")
+    report_lines.append("- Izgara aramasi / hiperparametre optimizasyonu: Yok (manuel ayar var)")
     report_lines.append("")
     
-    # Feature engineering
-    report_lines.append("### Feature Engineering Özeti")
+    # Ozellik muhendisligi
+    report_lines.append("### Ozellik Muhendisligi Ozeti")
     report_lines.append("- Tarih kolonları YOKSA:")
     report_lines.append("  * sales_per_item = Sales / Quantity")
     report_lines.append("  * discounted_sales = Sales * (1 - Discount)")
     report_lines.append("  * profit_margin = Profit / Sales")
     report_lines.append("  * is_high_discount = 1 if Discount >= 0.3 else 0")
-    report_lines.append("- Leakage önlemi: profit_margin hedef Profit iken modelden drop edilir")
+    report_lines.append("- Veri sizintisi onlemi: profit_margin hedef Profit iken modelden drop edilir")
     report_lines.append("- Kategorik normalize: strip() ile temizlik")
-    report_lines.append("- Missing handling: sayısal -> median, kategorik -> mode")
-    report_lines.append("- Outlier: IQR ile SADECE raporlanır, silinmez")
+    report_lines.append("- Eksik deger doldurma: sayisal -> median, kategorik -> mode")
+    report_lines.append("- Aykiri deger: IQR ile SADECE raporlanir, silinmez")
     report_lines.append("")
     
     # Rapor ve sunum dosyaları
@@ -172,13 +172,11 @@ def audit_project(project_root: Path) -> str:
     
     doc_files = [
         ("RAPOR.md", "Ana teslim raporu"),
-        ("OZET_SONUC.md", "Tek sayfalık özet + sonuç"),
-        ("SUNUM.md", "Sunum akışı + konuşma notları"),
+        ("OZET_SONUC.md", "Tek sayfalik ozet ve sonuc"),
+        ("SUNUM.md", "Sunum akisi ve konusma notlari"),
         ("SUNUM_SLIDES.pptx", "PowerPoint sunumu"),
         ("SUNUM_SLIDES.pdf", "PDF sunumu"),
         ("README.md", "Proje README"),
-        ("INSTRUCTIONS.md", "Basit talimatlar"),
-        ("ADIM_ADIM.md", "Adım adım anlatım"),
     ]
     
     for filename, desc in doc_files:
@@ -186,22 +184,13 @@ def audit_project(project_root: Path) -> str:
         exists, msg = check_file_exists(file_path, desc)
         report_lines.append(f"- {msg}")
     
-    # Deliverables paketi
-    deliverables_path = project_root / "deliverables" / "teslim_paketi"
-    if deliverables_path.exists():
-        report_lines.append(f"\n- ✓ Teslim paketi: {deliverables_path}/")
-        zip_path = project_root / "deliverables" / "teslim_paketi.zip"
-        if zip_path.exists():
-            size_kb = zip_path.stat().st_size / 1024
-            report_lines.append(f"  ✓ ZIP arşiv: teslim_paketi.zip ({size_kb:.1f} KB)")
-    
     report_lines.append("")
     report_lines.append("")
     
     # ========================================================================
     # 2) REPO ENVANTERİ
     # ========================================================================
-    report_lines.append("## 2) REPO ENVANTERİ")
+    report_lines.append("## 2) PROJE ENVANTERI")
     report_lines.append("")
     
     report_lines.append("### Ağaç Görünümü")
@@ -214,17 +203,17 @@ def audit_project(project_root: Path) -> str:
     report_lines.append("")
     
     important_files = {
-        "src/run_pipeline.py": "Ana pipeline: veri yükle, temizle, eğit, raporla",
-        "src/preprocess.py": "Veri temizleme ve feature engineering",
-        "src/train.py": "Model eğitimi (kullanılmıyorsa ignore)",
-        "src/evaluate.py": "Metrik hesaplama (MAE, RMSE, R²)",
-        "notebooks/01_load_clean.ipynb": "Veri yükleme ve temizleme (görsel)",
-        "notebooks/02_eda.ipynb": "Keşifsel Veri Analizi (EDA)",
-        "notebooks/03_model.ipynb": "Model eğitimi ve değerlendirme",
+        "src/run_pipeline.py": "Ana is akisi: veri yukle, temizle, egit, raporla",
+        "src/preprocess.py": "Veri temizleme ve ozellik muhendisligi",
+        "src/train.py": "Model egitimi (kullanilmiyorsa yoksayilabilir)",
+        "src/evaluate.py": "Metrik hesaplama (MAE, RMSE, R2)",
+        "notebooks/01_load_clean.ipynb": "Veri yukleme ve temizleme (gorsel)",
+        "notebooks/02_eda.ipynb": "Kesifsel Veri Analizi",
+        "notebooks/03_model.ipynb": "Model egitimi ve degerlendirme",
         "data/raw/SampleSuperstore.csv": "Ham veri seti",
         "reports/metrics.csv": "Model performans metrikleri",
-        "RAPOR.md": "Jüriye teslim raporu",
-        "requirements.txt": "Python bağımlılıkları",
+        "RAPOR.md": "Juriye teslim raporu",
+        "requirements.txt": "Python bagimliliklari",
     }
     
     for filepath, description in important_files.items():
@@ -240,7 +229,7 @@ def audit_project(project_root: Path) -> str:
     # ========================================================================
     # 3) ÇALIŞIYOR MU? DOĞRULAMASI
     # ========================================================================
-    report_lines.append("## 3) ÇALIŞIYOR MU? DOĞRULAMASI")
+    report_lines.append("## 3) CALISIYOR MU? DOGRULAMASI")
     report_lines.append("")
     
     report_lines.append("### Gerekli Kontroller ve Komutlar")
@@ -262,7 +251,7 @@ def audit_project(project_root: Path) -> str:
     report_lines.append("**Beklenen:** pandas, numpy, scikit-learn, matplotlib yüklensin")
     report_lines.append("")
     
-    report_lines.append("#### 3.3) Ana Pipeline Çalıştır")
+    report_lines.append("#### 3.3) Ana Is Akisini Calistir")
     report_lines.append("```powershell")
     report_lines.append("python -m src.run_pipeline")
     report_lines.append("```")
@@ -273,16 +262,16 @@ def audit_project(project_root: Path) -> str:
     report_lines.append("- reports/metrics_full.csv")
     report_lines.append("- reports/metrics_no_geo.csv")
     report_lines.append("- reports/top10_importance.csv")
-    report_lines.append("- Terminal'de: 'OK: outputs generated'")
+    report_lines.append("- Terminal'de: 'Tamam: ciktilar uretildi'")
     report_lines.append("")
     
     report_lines.append("#### 3.4) Notebook Durumu")
     report_lines.append("**Notebook'lar mevcut ama opsiyonel:**")
-    report_lines.append("- 01_load_clean.ipynb: Veri yükleme görselleri")
-    report_lines.append("- 02_eda.ipynb: EDA grafikleri")
-    report_lines.append("- 03_model.ipynb: Model sonuçları ve importance plot")
+    report_lines.append("- 01_load_clean.ipynb: Veri yukleme gorselleri")
+    report_lines.append("- 02_eda.ipynb: Kesifsel veri analizi grafikleri")
+    report_lines.append("- 03_model.ipynb: Model sonuclari ve onem grafigi")
     report_lines.append("")
-    report_lines.append("**Not:** Pipeline çalışıyorsa notebook'lara gerek yok. Sadece görsel istiyorsan çalıştır.")
+    report_lines.append("**Not:** Is akisi calisiyorsa notebook'lara gerek yok. Sadece gorsel istiyorsan calistir.")
     report_lines.append("")
     report_lines.append("")
     
@@ -294,44 +283,44 @@ def audit_project(project_root: Path) -> str:
     
     risks = [
         {
-            "soru": "Overfit riski var mı?",
+            "soru": "Asiri uyum riski var mi?",
             "cevap": (
-                "RandomForest 200 ağaç kullanıyor ama min_samples_leaf=2 ve max_features='sqrt' "
-                "ile sınırlandırdım. Test/train split %20 ile yapıldı. No-Geo senaryoda R² artışı "
-                "overfit azaldığını gösteriyor. Ancak cross-validation yapmadım, bu iyileştirilebilir."
+                "RandomForest 200 agac kullaniyor ama min_samples_leaf=2 ve max_features='sqrt' "
+                "ile sinirlandirdim. Test/train ayrimi %20 ile yapildi. Geo Yok senaryoda R2 artisi "
+                "asiri uyumun azaldigini gosteriyor. Ancak capraz dogrulama yapmadim, bu iyilestirilebilir."
             ),
         },
         {
-            "soru": "Leakage (veri sızıntısı) var mı?",
+            "soru": "Veri sizintisi var mi?",
             "cevap": (
-                "Hedef Profit iken profit_margin'i modelden drop ettim. Çünkü profit_margin doğrudan "
-                "Profit'ten türetiliyor ve leakage yaratır. Diğer feature'lar (sales_per_item, "
-                "discounted_sales) Sales ve Discount'tan türetilmiş olsa da bunlar hedeften bağımsız."
+                "Hedef Profit iken profit_margin'i modelden drop ettim. Cunku profit_margin dogrudan "
+                "Profit'ten turetiliyor ve sizinti yaratir. Diger ozellikler (sales_per_item, "
+                "discounted_sales) Sales ve Discount'tan turetilmis olsa da bunlar hedeften bagimsiz."
             ),
         },
         {
-            "soru": "log1p + shift neden kullanıldı?",
+            "soru": "log1p + shift neden kullanildi?",
             "cevap": (
-                "Profit negatif değerler içerebiliyor. log1p doğrudan negatife uygulanamaz. "
-                "Bu yüzden minimum değer negatifse otomatik shift ekliyorum (min_val + 1). "
-                "Böylece log dönüşümü çalışır ve çarpık dağılımı düzeltir."
+                "Profit negatif degerler icerebiliyor. log1p dogrudan negatife uygulanamaz. "
+                "Bu yuzden minimum deger negatifse otomatik shift ekliyorum (min_val + 1). "
+                "Boylece log donusumu calisir ve carpik dagilimi duzeltir."
             ),
         },
         {
-            "soru": "Geo kolonları (City/State/Postal Code) neden çıkarılınca performans arttı?",
+            "soru": "Geo kolonlari (City/State/Postal Code) neden cikarilinca performans artti?",
             "cevap": (
-                "Yüksek kardinalite (çok benzersiz değer) model karmaşıklığını artırıyor ve "
-                "genellemeyi zorlaştırıyor. Geo bilgisi dolaylı etki etse de bu veri setinde "
-                "Sales, Discount ve türetilmiş feature'lar daha güçlü. No-Geo'da R² 0.492'den "
-                "0.718'e çıktı, yani model daha genellenebilir oldu."
+                "Yuksek kardinalite (cok benzersiz deger) model karmasikligini artiriyor ve "
+                "genellemeyi zorlastiriyor. Geo bilgisi dolayli etki etse de bu veri setinde "
+                "Sales, Discount ve turetilmis ozellikler daha guclu. Geo Yok'ta R2 0.492'den "
+                "0.718'e cikti, yani model daha genellenebilir oldu."
             ),
         },
         {
-            "soru": "Outlier (aykırı değer) yaklaşımınız nedir?",
+            "soru": "Aykiri deger yaklasiminiz nedir?",
             "cevap": (
-                "IQR yöntemiyle aykırı değerleri tespit edip SADECE raporladım, silmedim. "
-                "Çünkü gerçek dünyada aykırı satışlar/kârlar doğal olabilir ve bunları silmek "
-                "bilgi kaybına yol açar. Model robust olmalı ve bunları öğrenmeli."
+                "IQR yontemiyle aykiri degerleri tespit edip SADECE raporladim, silmedim. "
+                "Cunku gercek dunyada aykiri satislar/karlar dogal olabilir ve bunlari silmek "
+                "bilgi kaybina yol acar. Model robust olmali ve bunlari ogrenmeli."
             ),
         },
     ]
@@ -346,12 +335,12 @@ def audit_project(project_root: Path) -> str:
     # ========================================================================
     # 5) TESLİM İÇİN EKSİKLER (P0/P1/P2)
     # ========================================================================
-    report_lines.append("## 5) TESLİM İÇİN EKSİKLER (P0/P1/P2)")
+    report_lines.append("## 5) TESLIM ICIN EKSIKLER (P0/P1/P2)")
     report_lines.append("")
     
     report_lines.append("### P0 (Kesin Şartlar - Olmadan Teslim Edilmez)")
     report_lines.append("- [x] Ham veri (SampleSuperstore.csv) mevcut")
-    report_lines.append("- [x] Pipeline çalışıyor (python -m src.run_pipeline)")
+    report_lines.append("- [x] Is akisi calisiyor (python -m src.run_pipeline)")
     report_lines.append("- [x] Metrik dosyaları üretiliyor (metrics.csv)")
     report_lines.append("- [x] RAPOR.md hazır")
     report_lines.append("- [x] OZET_SONUC.md hazır")
@@ -359,22 +348,20 @@ def audit_project(project_root: Path) -> str:
     report_lines.append("- [x] README.md mevcut ve güncel")
     report_lines.append("")
     
-    report_lines.append("### P1 (Puan Artıranlar - Olması İyi)")
+    report_lines.append("### P1 (Puan Artiranlar - Olmasi Iyi)")
     report_lines.append("- [x] Notebook'lar (01/02/03) mevcut")
-    report_lines.append("- [x] Feature importance raporu (top10_importance.csv)")
-    report_lines.append("- [x] Ablation testi yapılmış (drop_geo)")
-    report_lines.append("- [ ] Cross-validation eklenmemiş (İyileştirme önerisi)")
-    report_lines.append("- [ ] Grid search / hiperparametre optimizasyonu yapılmamış")
-    report_lines.append("- [x] Teslim paketi ZIP'i hazır (deliverables/teslim_paketi.zip)")
-    report_lines.append("- [ ] Video sunum hazırlanmamış (SUNUM.md'de plan var)")
+    report_lines.append("- [x] Ozellik onemi raporu (top10_importance.csv)")
+    report_lines.append("- [x] Ablasyon testi yapilmis (drop_geo)")
+    report_lines.append("- [ ] Capraz dogrulama eklenmemis (iyilestirme onerisi)")
+    report_lines.append("- [ ] Izgara aramasi / hiperparametre optimizasyonu yapilmamis")
     report_lines.append("")
     
     report_lines.append("### P2 (Opsiyonel - Bonus)")
     report_lines.append("- [ ] Ek model denemeleri (XGBoost, LightGBM vb.)")
-    report_lines.append("- [ ] Feature selection / PCA")
-    report_lines.append("- [ ] Deployment planı / API örneği")
-    report_lines.append("- [ ] Docker container")
-    report_lines.append("- [ ] CI/CD pipeline")
+    report_lines.append("- [ ] Ozellik secimi / PCA")
+    report_lines.append("- [ ] Yayinlama plani / API ornegi")
+    report_lines.append("- [ ] Docker kapsayicisi")
+    report_lines.append("- [ ] CI/CD is akisi")
     report_lines.append("")
     report_lines.append("")
     
@@ -386,16 +373,15 @@ def audit_project(project_root: Path) -> str:
     report_lines.append("---")
     report_lines.append("")
     report_lines.append(
-        "Hocam, projem SampleSuperstore verisiyle Profit (kâr) tahmini yapıyor. "
-        "Veriyi temizledim, sales_per_item, discounted_sales gibi feature'lar türettim "
-        "ve iki model karşılaştırdım: LinearRegression baseline olarak zayıf kaldı (R² negatif), "
-        "ama RandomForestRegressor çok daha iyi sonuç verdi (R² 0.492). Önemli bir bulgu da "
-        "City/Postal Code gibi geo kolonlarını çıkarınca modelin genelleme yeteneği arttı "
-        "(R² 0.718'e çıktı). Leakage önlemi olarak profit_margin'i modelden çıkardım, "
-        "outlier'ları sildim yerine sadece raporladım. Tüm kod, rapor, sunum ve teslim "
-        "paketi hazır. Eksik olan sadece cross-validation ve video sunum ama bunlar opsiyonel. "
-        "Proje çalışır durumda ve tek komutla (`python -m src.run_pipeline`) tüm çıktıları "
-        "yeniden üretilebiliyor."
+        "Hocam, projem SampleSuperstore verisiyle Profit (kar) tahmini yapiyor. "
+        "Veriyi temizledim, sales_per_item, discounted_sales gibi ozellikler turettim "
+        "ve iki model karsilastirdim: LinearRegression temel olarak zayif kaldi (R2 negatif), "
+        "ama RandomForestRegressor cok daha iyi sonuc verdi (R2 0.492). Onemli bir bulgu da "
+        "City/Postal Code gibi geo kolonlarini cikarinca modelin genelleme yetenegi artti "
+        "(R2 0.718'e cikti). Veri sizintisi onlemi olarak profit_margin'i modelden cikardim, "
+        "aykiri degerleri silmedim sadece raporladim. Tum kod, rapor ve sunum dosyalari hazir. "
+        "Proje calisir durumda ve tek komutla (`python -m src.run_pipeline`) tum ciktilari "
+        "yeniden uretilebiliyor."
     )
     report_lines.append("")
     report_lines.append("---")
@@ -413,7 +399,7 @@ def main():
     """Ana fonksiyon."""
     project_root = Path(__file__).resolve().parents[1]
     
-    print("Proje audit ediliyor...")
+    print("Proje denetleniyor...")
     print(f"Konum: {project_root}")
     print("")
     
@@ -423,7 +409,7 @@ def main():
     print(report)
     
     # Raporu dosyaya kaydet
-    output_path = project_root / "DURUM_RAPORU.md"
+    output_path = project_root / "reports" / "durum_raporu.txt"
     output_path.write_text(report, encoding="utf-8")
     print("")
     print(f"✓ Rapor kaydedildi: {output_path}")

@@ -150,17 +150,17 @@ def build_summary(df: pd.DataFrame) -> str:
     nonzero_missing = missing_by_col[missing_by_col > 0]
 
     lines = [
-        f"Rows: {rows}",
-        f"Columns: {cols}",
-        f"Numeric columns ({len(num_cols)}): {', '.join(num_cols) if num_cols else 'None'}",
-        f"Categorical columns ({len(cat_cols)}): {', '.join(cat_cols) if cat_cols else 'None'}",
-        f"Total missing values: {missing_total}",
+        f"Satir sayisi: {rows}",
+        f"Kolon sayisi: {cols}",
+        f"Sayisal kolonlar ({len(num_cols)}): {', '.join(num_cols) if num_cols else 'Yok'}",
+        f"Kategorik kolonlar ({len(cat_cols)}): {', '.join(cat_cols) if cat_cols else 'Yok'}",
+        f"Toplam eksik deger: {missing_total}",
     ]
 
     if nonzero_missing.empty:
-        lines.append("Missing by column: None")
+        lines.append("Kolona gore eksik: Yok")
     else:
-        lines.append("Missing by column:")
+        lines.append("Kolona gore eksikler:")
         for col, count in nonzero_missing.items():
             lines.append(f"- {col}: {int(count)}")
 
@@ -171,7 +171,7 @@ def train_models(
     df: pd.DataFrame, target: str, drop_geo: bool = False
 ) -> tuple[pd.DataFrame, pd.DataFrame]:
     if target not in df.columns:
-        raise ValueError("Profit column not found")
+        raise ValueError("Profit kolonu bulunamadi")
 
     X = df.drop(columns=[target])
     if target.lower() == "profit":
@@ -244,26 +244,26 @@ def train_models(
 
 
 def main() -> None:
-    """Ana pipeline fonksiyonu - CLI ile çalıştırılabilir."""
+    """Ana is akisi fonksiyonu - CLI ile calistirilabilir."""
     parser = argparse.ArgumentParser(
-        description="VB_DS Profit Tahmini Pipeline - Veri temizleme, feature engineering ve model eğitimi"
+        description="VB_DS Kar Tahmini Is Akisi - Veri temizleme, ozellik muhendisligi ve model egitimi"
     )
     parser.add_argument(
         "--drop-geo",
         action="store_true",
-        help="City/State/Postal Code kolonlarını çıkar (No-Geo ablation testi)"
+        help="City/State/Postal Code kolonlarini cikar (Geo yok ablasyon testi)"
     )
     parser.add_argument(
         "--seed",
         type=int,
         default=42,
-        help="Random seed (reproducibility için, default: 42)"
+        help="Rastgelelik tohumu (tekrarlanabilirlik icin, varsayilan: 42)"
     )
     parser.add_argument(
         "--output-dir",
         type=str,
         default="reports",
-        help="Çıktı dizini (default: reports/)"
+        help="Cikti dizini (varsayilan: reports/)"
     )
     
     args = parser.parse_args()
@@ -274,7 +274,7 @@ def main() -> None:
     output_dir = project_root / args.output_dir
     dirs = ensure_dirs(project_root)
     
-    logging.info(f"Pipeline başlatıldı - Seed: {args.seed}, Drop Geo: {args.drop_geo}")
+    logging.info(f"Is akisi baslatildi - Tohum: {args.seed}, Geo cikarma: {args.drop_geo}")
     logging.info(f"Proje kök dizini: {project_root}")
     logging.info(f"Çıktı dizini: {output_dir}")
 
@@ -283,7 +283,7 @@ def main() -> None:
         logging.error(f"Ham veri bulunamadı: {raw_path}")
         logging.error("Lütfen SampleSuperstore.csv dosyasını data/raw/ klasörüne koyun.")
         raise FileNotFoundError(
-            f"SampleSuperstore.csv not found. Expected at {raw_path}"
+            f"SampleSuperstore.csv bulunamadi. Beklenen konum: {raw_path}"
         )
     
     logging.info(f"Ham veri yükleniyor: {raw_path}")
@@ -293,7 +293,7 @@ def main() -> None:
     logging.info("Veri temizleniyor...")
     df = clean_data(df)
     
-    logging.info("Feature engineering yapılıyor...")
+    logging.info("Ozellik muhendisligi yapiliyor...")
     df = feature_engineering(df)
 
     processed_path = dirs["processed_dir"] / "clean.csv"
@@ -305,10 +305,10 @@ def main() -> None:
     summary_path.write_text(summary_text, encoding="utf-8")
     logging.info(f"Veri özeti kaydedildi: {summary_path}")
 
-    logging.info("Model eğitimi başlıyor (Full - tüm kolonlarla)...")
+    logging.info("Model egitimi basliyor (Tam - tum kolonlarla)...")
     metrics_full, top10_df = train_models(df, target="Profit", drop_geo=False)
     
-    logging.info("Model eğitimi başlıyor (No-Geo - City/State/Postal Code hariç)...")
+    logging.info("Model egitimi basliyor (Geo Yok - City/State/Postal Code haric)...")
     metrics_no_geo, _ = train_models(df, target="Profit", drop_geo=True)
 
     logging.info("Metrikler kaydediliyor...")
@@ -317,9 +317,9 @@ def main() -> None:
     metrics_no_geo.to_csv(dirs["reports_dir"] / "metrics_no_geo.csv", index=False)
     top10_df.to_csv(dirs["reports_dir"] / "top10_importance.csv", index=False)
 
-    logging.info("✓ Pipeline tamamlandı!")
+    logging.info("✓ Is akisi tamamlandi!")
     logging.info(f"Çıktılar: {dirs['reports_dir']}/")
-    print("OK: outputs generated")
+    print("Tamam: ciktilar uretildi")
 
 
 if __name__ == "__main__":

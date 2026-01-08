@@ -46,7 +46,7 @@ def _drop_geo_columns(df: pd.DataFrame, drop_geo: bool) -> pd.DataFrame:
 
 def prepare_features(df: pd.DataFrame, target: str, drop_geo: bool = False):
     if target not in df.columns:
-        raise ValueError(f"Target column not found: {target}")
+        raise ValueError(f"Hedef kolonu bulunamadi: {target}")
 
     y = df[target]
     X = df.drop(columns=[target])
@@ -180,24 +180,24 @@ def train_and_evaluate(X_train, X_test, y_train, y_test):
                 feature_names = get_feature_names(pipeline.named_steps["preprocess"])
                 if len(feature_names) == len(importances):
                     order = importances.argsort()[::-1][:10]
-                    print("RandomForest feature importances (top 10):")
+                    print("RandomForest ozellik onemi (ilk 10):")
                     for idx in order:
                         print(f"  {feature_names[idx]}: {importances[idx]:.4f}")
                 else:
-                    print("RandomForest feature importances unavailable: name mismatch")
+                    print("RandomForest ozellik onemi kullanilamadi: isim uyusmazligi")
             else:
-                print("RandomForest feature importances unavailable: model mismatch")
+                print("RandomForest ozellik onemi kullanilamadi: model uyusmazligi")
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Train regression models")
-    parser.add_argument("--input", required=True, help="Path to processed CSV")
-    parser.add_argument("--target", default="Profit", help="Target column name")
-    parser.add_argument("--test-size", type=float, default=0.2, help="Test split ratio")
+    parser = argparse.ArgumentParser(description="Regresyon modellerini egit")
+    parser.add_argument("--input", required=True, help="Islenmis CSV dosya yolu")
+    parser.add_argument("--target", default="Profit", help="Hedef kolon adi")
+    parser.add_argument("--test-size", type=float, default=0.2, help="Test ayrim orani")
     parser.add_argument(
         "--drop-geo",
         action="store_true",
-        help="Drop City/Postal Code/State for generalization test",
+        help="City/Postal Code/State kolonlarini genelleme testi icin cikar",
     )
     args = parser.parse_args()
 

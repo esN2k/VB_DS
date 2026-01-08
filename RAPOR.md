@@ -1,4 +1,4 @@
-# RAPOR - Profit Tahmini (SampleSuperstore)
+# RAPOR - Kar Tahmini (SampleSuperstore)
 
 ## 1) Proje Amaci
 
@@ -32,15 +32,15 @@ Tarih kolonlari yoksa:
 - `profit_margin`
 - `is_high_discount`
 
-Not: Profit hedefi kullanildigi icin `profit_margin` egitimde **drop** edildi (leakage onlemi).
+Not: Profit hedefi kullanildigi icin `profit_margin` egitimde **drop** edildi (veri sizintisi onlemi).
 
 ## 5) Modelleme
 
 Iki model kuruldu:
-- **LinearRegression** (baseline)
+- **LinearRegression** (temel)
 - **RandomForestRegressor** (daha guclu, dogrusal olmayan iliskileri yakalar)
 
-Pipeline icinde:
+Is akisi icinde:
 - Kategorik degiskenler One-Hot Encoding
 - Sayisal degiskenler StandardScaler
 
@@ -60,21 +60,21 @@ Yorum:
 - Linear Regression zayif kaldigi icin R2 negatif cikti.
 - Random Forest belirgin sekilde daha iyi; hata dusuyor ve R2 artiyor.
 
-## 6.1) Ablation Deneyi: Geo Kolonlarini Cikarmanin Etkisi (drop_geo)
+## 6.1) Ablasyon Deneyi: Geo Kolonlarini Cikarmanin Etkisi (drop_geo)
 
 Modelin bazi sehir/posta kodu gibi yuksek kardinaliteli alanlari
-"ezberleyip ezberlemedigini" gormek icin kucuk bir ablation testi yaptim.
+"ezberleyip ezberlemedigini" gormek icin kucuk bir ablasyon testi yaptim.
 Bu amacla Random Forest modelini iki senaryoda karsilastirdim:
 
-1. **Full**: Tum kolonlar (City/State/Postal Code dahil)
-2. **No-Geo (drop_geo)**: City/State/Postal Code cikarilarak
+1. **Tam**: Tum kolonlar (City/State/Postal Code dahil)
+2. **Geo Yok (drop_geo)**: City/State/Postal Code cikarilarak
 
 Asagidaki metrikler test seti uzerinde alinmistir:
 
 | Senaryo           | Model                 |   MAE |   RMSE |    R2 |
 | ----------------- | --------------------- | ----: | -----: | ----: |
-| Full              | RandomForestRegressor | 42.15 | 156.90 | 0.492 |
-| No-Geo (drop_geo) | RandomForestRegressor | 25.98 | 116.89 | 0.718 |
+| Tam               | RandomForestRegressor | 42.15 | 156.90 | 0.492 |
+| Geo Yok (drop_geo)| RandomForestRegressor | 25.98 | 116.89 | 0.718 |
 
 Bu sonuclara gore geo kolonlarini cikardigimda model performansi belirgin
 sekilde artti. Bunu iki sekilde yorumluyorum:
@@ -89,7 +89,7 @@ sekilde artti. Bunu iki sekilde yorumluyorum:
 Bu nedenle final yorumlarda "geo alanlari cikarildiginda modelin daha
 genellenebilir hale geldigi" not edildi.
 
-## 7) Feature Importance (Random Forest)
+## 7) Ozellik Onemi (Random Forest)
 
 En etkili ozellikler:
 - `Sales` (0.212)
@@ -105,19 +105,19 @@ En etkili ozellikler:
 
 Bu liste, karliligin sadece satis miktariyla degil,
 indirim ve urun tipiyle de guclu sekilde iliskili oldugunu gosterir.
-Feature importance listesinde Sales, sales_per_item ve discounted_sales gibi
+Ozellik onemi listesinde Sales, sales_per_item ve discounted_sales gibi
 degiskenlerin ustte cikmasi; indirim ve adet etkisinin karlilik uzerinde
 dogrudan belirleyici oldugunu destekledi.
 
 ## 8) Sonuc ve Ogrenimler
 
-- Karlier iliskiler dogrusal degil; agac tabanli model daha basarili.
+- Kar iliskileri dogrusal degil; agac tabanli model daha basarili.
 - Indirim ve kategori etkisi kritik.
-- Leakage riski olan `profit_margin` modeli yapay olarak sisirebilirdi; cikarildi.
+- Veri sizintisi riski olan `profit_margin` modeli suni sekilde sisirebilirdi; cikarildi.
 
 ## 9) Sinirlamalar ve Gelecek Isler
 
-- Verideki bolgesel degiskenler (City/Postal Code) overfit riski tasiyabilir.
+- Verideki bolgesel degiskenler (City/Postal Code) asiri uyum riski tasiyabilir.
 - Hiperparametre aramasi yapilirsa performans artabilir.
 - Daha iyi genelleme icin kimi kategoriler sadelestirilebilir.
 

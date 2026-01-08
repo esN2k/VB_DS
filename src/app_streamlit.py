@@ -21,7 +21,7 @@ def load_data():
     
     if not clean_path.exists():
         st.error(f"❌ Temizlenmiş veri bulunamadı: {clean_path}")
-        st.info("💡 Lütfen önce pipeline'ı çalıştırın:")
+        st.info("💡 Lutfen once is akisini calistirin:")
         st.code("python -m src.run_pipeline", language="bash")
         return None
     
@@ -56,14 +56,14 @@ def load_metrics():
 def main():
     """Ana uygulama."""
     st.set_page_config(
-        page_title="VB_DS Profit Tahmini",
+        page_title="VB_DS Kar Tahmini",
         page_icon="📊",
         layout="wide"
     )
     
     # Başlık
-    st.title("📊 VB_DS Profit Tahmini Projesi")
-    st.markdown("**Hedef:** SampleSuperstore verisiyle kâr (Profit) tahmini")
+    st.title("📊 VB_DS Kar Tahmini Projesi")
+    st.markdown("**Hedef:** SampleSuperstore verisiyle kar (Profit) tahmini")
     st.markdown("---")
     
     # Veriyi yükle
@@ -75,7 +75,7 @@ def main():
     # Sekme yapısı
     tab1, tab2, tab3 = st.tabs([
         "📋 Veri Özeti",
-        "📈 EDA Grafikleri",
+        "📈 Keşifsel Veri Analizi",
         "🎯 Model Sonuçları"
     ])
     
@@ -144,15 +144,15 @@ def main():
             st.subheader("Örnek Veri (İlk 10 Satır)")
             st.dataframe(df.head(10), width='stretch')
     
-    # TAB 2: EDA Grafikleri
+    # TAB 2: Kesifsel Veri Analizi Grafikleri
     with tab2:
-        st.header("📈 EDA Grafikleri")
+        st.header("📈 Keşifsel Veri Analizi Grafikleri")
         
         # Sayısal kolonlar
         num_cols = df.select_dtypes(include=["number"]).columns.tolist()
         
         if num_cols:
-            st.subheader("Histogram - Dağılım Grafikleri")
+            st.subheader("Dağılım Grafikleri")
             
             # Kolon seçimi
             selected_col = st.selectbox("Kolon Seçin", num_cols)
@@ -173,9 +173,9 @@ def main():
                 stats = df[selected_col].describe()
                 st.dataframe(stats.to_frame().T, width='stretch')
         
-        # Scatter plot
+        # Sacilim grafigi
         if len(num_cols) >= 2:
-            st.subheader("Scatter Plot - İlişki Grafiği")
+            st.subheader("Saçılım Grafiği - İlişki Grafiği")
             
             col1, col2 = st.columns(2)
             with col1:
@@ -219,7 +219,7 @@ def main():
                                    ha="center", va="center", color="black", fontsize=8)
             
             plt.colorbar(im, ax=ax)
-            ax.set_title("Korelasyon Matrisi (Heatmap)")
+            ax.set_title("Korelasyon Matrisi (Isı Haritası)")
             st.pyplot(fig)
     
     # TAB 3: Model Sonuçları
@@ -229,34 +229,34 @@ def main():
         metrics = load_metrics()
         
         if not metrics:
-            st.warning("⚠️ Model metrikleri bulunamadı. Pipeline'ı çalıştırın.")
+            st.warning("⚠️ Model metrikleri bulunamadi. Is akisini calistirin.")
             st.code("python -m src.run_pipeline", language="bash")
             st.stop()
         
-        # Full Model Metrikleri
+        # Tam Model Metrikleri
         if "full" in metrics:
-            st.subheader("📊 Full Model Metrikleri (Tüm Kolonlar)")
+            st.subheader("📊 Tam Model Metrikleri (Tum Kolonlar)")
             st.dataframe(metrics["full"], width='stretch')
             
             # En iyi modeli vurgula
             best_model_full = metrics["full"].loc[metrics["full"]["r2"].idxmax()]
-            st.success(f"✅ En İyi Model (Full): **{best_model_full['model']}** - R² = {best_model_full['r2']:.4f}")
+            st.success(f"✅ En Iyi Model (Tam): **{best_model_full['model']}** - R² = {best_model_full['r2']:.4f}")
         
         st.markdown("---")
         
-        # No-Geo Model Metrikleri
+        # Geo Yok Model Metrikleri
         if "no_geo" in metrics:
-            st.subheader("📊 No-Geo Model Metrikleri (City/State/Postal Code Hariç)")
+            st.subheader("📊 Geo Yok Model Metrikleri (City/State/Postal Code Haric)")
             st.dataframe(metrics["no_geo"], width='stretch')
             
             # En iyi modeli vurgula
             best_model_no_geo = metrics["no_geo"].loc[metrics["no_geo"]["r2"].idxmax()]
-            st.success(f"✅ En İyi Model (No-Geo): **{best_model_no_geo['model']}** - R² = {best_model_no_geo['r2']:.4f}")
+            st.success(f"✅ En Iyi Model (Geo Yok): **{best_model_no_geo['model']}** - R² = {best_model_no_geo['r2']:.4f}")
         
         # Karşılaştırma
         if "full" in metrics and "no_geo" in metrics:
             st.markdown("---")
-            st.subheader("📊 Full vs No-Geo Karşılaştırması")
+            st.subheader("📊 Tam ve Geo Yok Karsilastirmasi")
             
             # RandomForest karşılaştırması
             rf_full = metrics["full"][metrics["full"]["model"] == "RandomForestRegressor"]
@@ -297,9 +297,9 @@ def main():
         
         st.markdown("---")
         
-        # Feature Importance
+        # Ozellik Onemi
         if "importance" in metrics:
-            st.subheader("📊 Top-10 Feature Importance (RandomForest)")
+            st.subheader("📊 İlk 10 Özellik Önemi (RandomForest)")
             
             import matplotlib.pyplot as plt
             
@@ -309,13 +309,16 @@ def main():
             ax.barh(top10["feature"], top10["importance"], color="steelblue", edgecolor="black")
             ax.set_xlabel("Önem Skoru")
             ax.set_ylabel("Özellik")
-            ax.set_title("Top-10 En Önemli Özellikler")
+            ax.set_title("İlk 10 En Önemli Özellik")
             ax.invert_yaxis()
             ax.grid(True, axis='x', alpha=0.3)
             st.pyplot(fig)
             
-            # Tablo olarak da göster
-            st.dataframe(top10, width='stretch')
+            # Tablo olarak da goster
+            top10_display = top10.rename(
+                columns={"feature": "Özellik", "importance": "Önem"}
+            )
+            st.dataframe(top10_display, width='stretch')
     
     # Footer
     st.markdown("---")
